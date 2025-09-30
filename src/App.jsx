@@ -17,35 +17,54 @@ function App() {
     // prevenzione della ricarica dopo il submit
     e.preventDefault()
 
-    // aggiunta del nuovo articolo all'array di articoli
-    setTitles([...titles, { title: userArticle }])
+    // if per prender i casi in cui non venga inserita una stringa vuota
+    if (userArticle.trim() === '') {
+      alert('Inserisci un titolo valido')
+    } else {
 
-    // resetto il campo dell'input
-    userArticle('')
+      // aggiunta del nuovo articolo all'array di articoli
+      setTitles([...titles, { title: userArticle }])
+
+      // resetto il campo dell'input
+      setUserArticle('')
+    }
+  }
+
+  // rimozione articolo
+  const deleteArticle = i => {
+    const updatedTasks = titles.filter((obj, index) => {
+      return index !== i
+    })
+    setTitles(updatedTasks)
   }
 
 
   return (
     <>
       <form action="submit" onSubmit={formSubmit}>
-
+        <label htmlFor=""></label>
         <input type="text"
           value={userArticle}
           placeholder='inserisci il titolo del nuovo articolo'
-          onChange={e => { setUserArticle(e.target.value) }} />
+          onChange={e => { setUserArticle(e.target.value) }}
+        />
 
         <button>Invia</button>
       </form>
 
       <ul>
         {/* ciclo dell'array di articoli da displayare in html */}
-        {titles.map((obj, index) =>
+        {titles.map((obj, index) => (
 
           // siccome il nuovo articolo dell'utente sará aggiunto alla lista che ha giá id, devo implementare un index
-          <li key={obj.id || index}>{obj.title}</li>
+          < li key={index} > {obj.title}
 
-        )}
-      </ul>
+            {/* rimozione dell'articolo */}
+            < button onClick={() => deleteArticle(index)}>X</button>
+
+          </li >
+        ))}
+      </ul >
     </>
   )
 }
